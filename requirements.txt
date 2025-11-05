@@ -1,0 +1,30 @@
+# Core LangChain Ecosystem
+langchain
+langchain-core
+langchain-community
+langchain-groq
+langsmith
+langgraph
+langgraph-checkpoint-sqlite
+
+# Vector Store & Embeddings
+faiss-cpu
+sentence-transformers
+
+# Document Loaders
+pypdf
+python-docx
+openpyxl
+python-pptx
+unstructured
+
+# Utils & Networking
+beautifulsoup4
+requests
+python-dotenv
+tiktoken
+pandas
+
+# UI
+streamlit
+plotly
