@@ -62,7 +62,7 @@ with st.sidebar:
     st.subheader("⚙️ Settings")
     st.session_state.show_sources = st.checkbox("Show Sources", value=True)
     st.session_state.show_suggestions = st.checkbox("Query Suggestions", value=True)
-    #show_stats = st.checkbox("Show Statistics", value=True)
+    show_stats = st.checkbox("Show Statistics", value=True)
     
     #Token tracking toggle
     track_tokens = st.checkbox("Track Token Usage", value=False)
@@ -139,7 +139,8 @@ if  st.session_state.current_thread:
                         # Cleanup
                         os.remove(temp_path)
                         
-                        st.success(f"✅ {file.name}: {chunk_count} chunks")
+                        st.success(f" {file.name}: {chunk_count} chunks")
+                        
     
     with tab2:
         url = st.text_input("Enter URL")
@@ -287,4 +288,3 @@ if  st.session_state.current_thread:
                 mime="text/plain"
             )
             
-    

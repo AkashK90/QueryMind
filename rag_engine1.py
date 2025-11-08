@@ -241,8 +241,7 @@ class RAGEngine:
             state['sources']=[]
             return state
         
-        # Retrieve documents
-        
+        # Retrieve documents        
         retriever = self.vector_stores[thread_id].as_retriever(
             search_kwargs={"k": config.RETRIEVAL_K,
                            'fetch_k':10,
@@ -372,17 +371,6 @@ class RAGEngine:
                 state = event["refine"]
                 if "answer" in state:
                     yield {"type": "answer", "content": state["answer"]}
-        
-        # Final state
-        # final_state = self.workflow.get_state(config_dict)
-        # if final_state:
-        #     yield {
-        #         "type": "complete",
-        #         "answer": final_state.values.get("answer", ""),
-        #         "sources": final_state.values.get("sources", []),
-        #         "input_tokens": final_state.values.get("input_tokens", 0),
-        #         "output_tokens": final_state.values.get("output_tokens", 0)
-        #     }
             
         final_state = self.workflow.get_state(config_dict)
 
