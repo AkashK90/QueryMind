@@ -104,49 +104,9 @@ class RAGEngine:
         workflow.add_edge("refine", END)
         
         return workflow.compile(checkpointer=self.checkpointer)
-    
-    '''def load_documents(self, file_path: str, file_type: str) -> List[Document]:
-        """Load documents based on file type"""
-        loaders = {
-            "pdf":  PyPDFLoader,
-            "txt":  TextLoader,
-            "py":   PythonLoader,
-            "docx": Docx2txtLoader,
-            "pptx": UnstructuredPowerPointLoader
-        }
-        
-        if file_type == "url":
-            loader = WebBaseLoader(file_path)
-            
-        # if file_type == "pdf":
-        #     loader= PyPDFLoader(file_path)
-        else:
-            loader_class = loaders.get(file_type, TextLoader)
-            loader = loader_class(file_path)
-        
-        return loader.load()
-    '''
-    
+       
     def load_documents(self,file_path: str, file_type: str) -> List[Document]:
         try:
-        # Auto-detect extension if not provided
-            # if not file_type:
-            #     if file_path.startswith("http://") or file_path.startswith("https://"):
-            #         file_type = "url"
-            #     else:
-            #         file_type = os.path.splitext(file_path)[1].lower().lstrip(".") or "txt"
-
-        
-        # loaders = {
-        #         "pdf": UnstructuredPDFLoader, #PDFPlumberLoader,                 # Extracts text from PDF using pdfplumber (more accurate than PyPDF)
-        #         "txt": TextLoader,                       # Loads plain text files (.txt)
-        #         "py": PythonLoader,                      # Loads Python source code files (.py)
-        #         "docx": Docx2txtLoader,                  # Extracts text from Word documents (.docx)
-        #         "pptx": UnstructuredPowerPointLoader,    # Extracts text from PowerPoint slides (.pptx)
-        #         "csv": CSVLoader                         # Loads CSV files as tabular documents
-        #     }
-               
-# ---------------------- URL Loader ----------------------
             if file_type == "url":
                 print("Loading URL using WebBaseLoader...")
                 loader = WebBaseLoader([file_path])  # SeleniumURLLoader  for javascript
@@ -246,7 +206,7 @@ class RAGEngine:
             search_kwargs={"k": config.RETRIEVAL_K,
                            'fetch_k':10,
                            'lambda_mult':0.5},
-            search_type='similarity'#'mmr'
+            search_type='similarity' #'mmr'
             #search_type="similarity_score_threshold"
         )
         # docs = retriever.get_relevant_documents(query)
@@ -261,9 +221,9 @@ class RAGEngine:
             {"content": d.page_content[:200], "metadata": d.metadata}
             for d in docs
         ]
-        
+               
         return state
-    # print("Embedding count:", self.vector_stores[thread_id].index.ntotal)
+
     def _generate_answer(self, state: RAGState) -> RAGState:
         """Generate answer using LLM"""
         thread_id = state.get("thread_id", "unknown")

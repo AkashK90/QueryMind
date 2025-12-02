@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 import plotly.graph_objects as go
 import config
-#from rag_engine import RAGEngine
+ 
 from rag_engine1 import RAGEngine
 from database import MemoryDatabase
 import utils
@@ -88,20 +88,20 @@ if not st.session_state.current_thread:
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown("### 📄 Multi-Document Support")
+        st.markdown("###  Multi-Document Support")
         st.write("Upload PDFs, DOCX, TXT, PPTX or web URLs")
     with col2:
-        st.markdown("### 💾 Persistent Memory")
+        st.markdown("###  Persistent Memory")
         st.write("Conversations saved across sessions")
     with col3:
-        st.markdown("### 🔄 Checkpointing")
+        st.markdown("###  Checkpointing")
         st.write("Resume or rollback conversations")
     
 if  st.session_state.current_thread:
     # Document upload
     st.subheader("📤 Upload Documents")
     
-    tab1, tab2 = st.tabs(["📁 File Upload", "🔗 URL"])
+    tab1, tab2 = st.tabs(["📁 File Upload", " URL"])
     
     with tab1:
         uploaded_files = st.file_uploader(
@@ -174,7 +174,7 @@ if  st.session_state.current_thread:
             st.markdown(msg["content"])
             
             if msg["role"] == "assistant" and st.session_state.show_sources and msg.get("sources"):
-                with st.expander("📚 Sources"):
+                with st.expander(" Sources"):
                     for i, j in enumerate(msg["sources"], 1):
                         st.markdown(f"**Source {i}:**")
                         st.text(j.get("content", "")[:200] + "...")
@@ -247,7 +247,7 @@ if  st.session_state.current_thread:
         if st.session_state.show_suggestions:
             suggestions = utils.generate_query_suggestions(query, [m["content"] for m in messages])
             if suggestions:
-                st.markdown("**💡 Suggested follow-ups:**")
+                st.markdown("** Suggested follow-ups:**")
                 cols = st.columns(len(suggestions))
                 for col, suggestion in zip(cols, suggestions):
                     if col.button(suggestion, key=f"sug_{hash(suggestion)}"):
@@ -261,11 +261,11 @@ if  st.session_state.current_thread:
         new_name = st.text_input("Rename thread", key="rename_input")
         if new_name and st.button("✏️ Rename"):
             st.session_state.db.rename_thread(st.session_state.current_thread, new_name)
-            st.success("✅ Renamed!")
+            st.success(" Renamed!")
             st.rerun()
     
     with col2:
-        if st.button("📜 View Checkpoints"):
+        if st.button(" View Checkpoints"):
             checkpoints = st.session_state.rag_engine1.get_checkpoint_history(
                 st.session_state.current_thread
             )
@@ -276,13 +276,13 @@ if  st.session_state.current_thread:
                 st.info("No checkpoints yet")
     
     with col3:
-        if st.button("🔄 Export Chat"):
+        if st.button(" Export Chat"):
             chat_export = "\n\n".join([
                 f"{m['role'].upper()}: {m['content']}" 
                 for m in messages
             ])
             st.download_button(
-                "💾 Download",
+                "Download",
                 chat_export,
                 file_name=f"chat_{st.session_state.current_thread[:8]}.txt",
                 mime="text/plain"
