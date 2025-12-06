@@ -76,7 +76,7 @@ class RAGEngine:
        # self.checkpointer = SqliteSaver.from_conn_string(config.CHECKPOINT_PATH)  #  don't override
         conn = sqlite3.connect(config.CHECKPOINT_PATH, check_same_thread=False)
         # for making big size data because datastoring constraint coming
-        conn.execute("PRAGMA max_page_count = 2147483646")  # ~2TB limit
+        conn.execute("PRAGMA max_page_count = 2147483646") 
         conn.execute("PRAGMA page_size = 32768")  # Increase page size
         self.checkpointer = SqliteSaver(conn)        
         # Build workflow

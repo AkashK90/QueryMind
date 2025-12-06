@@ -144,7 +144,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+checkpoints.db
+rag_memory.db
 # Spyder project settings
 .spyderproject
 .spyproject

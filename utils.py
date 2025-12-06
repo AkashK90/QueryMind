@@ -12,7 +12,6 @@ def count_tokens(text: str, model: str = "gpt-3.5-turbo") -> int:
         # Fallback: approximate 4 chars per token
         # return len(text) //4
         return int(len(text.split()) * 1.3)
-
 def calculate_cost(input_tokens: int, output_tokens: int, 
                    provider: str = config.LLM_PROVIDER) -> float:
     "Calculate API cost based on token usage"

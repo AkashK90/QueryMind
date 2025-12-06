@@ -1,11 +1,11 @@
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
+
 os.environ["USER_AGENT"] = "RAG-Chatbot/1.0"
 # API Keys
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Uncomment for OpenAI
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  
 
 # LLM Configuration
 LLM_PROVIDER = "groq"  # or "openai"
@@ -23,7 +23,7 @@ CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 150
 
 # Retrieval
-RETRIEVAL_K = 3
+RETRIEVAL_K = 4
 SIMILARITY_THRESHOLD = 0.75
 
 # Database
@@ -31,8 +31,7 @@ DB_PATH = "rag_memory.db"
 CHECKPOINT_PATH = "checkpoints.db"
 
 # Token Pricing (USD per 1M tokens)
-GROQ_PRICING = {"input": 0.27, "output": 0.27}  # Mixtral pricing openAi
-# OPENAI_PRICING = {"input": 10.0, "output": 30.0}  # GPT-4 Turbo pricing
+GROQ_PRICING = {"input": 0.27, "output": 0.27}  
 
 # UI Configuration
 PAGE_TITLE = " Chat with your Docs"

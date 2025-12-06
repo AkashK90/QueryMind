@@ -2,7 +2,7 @@
 
 Production-ready Retrieval-Augmented Generation system built with LangGraph, featuring persistent memory, checkpointing, and multi-document support.
 
-## ✨ Features
+##  Features
 
 ### Core Capabilities
 -  **LangGraph Workflow**: Stateful RAG pipeline with conditional logic

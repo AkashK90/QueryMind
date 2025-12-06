@@ -4,12 +4,12 @@ import os
 from datetime import datetime
 import plotly.graph_objects as go
 import config
- 
 from rag_engine1 import RAGEngine
 from database import MemoryDatabase
 import utils
 from dotenv import load_dotenv
 load_dotenv()
+
 # Page config
 st.set_page_config(
     page_title=config.PAGE_TITLE,
@@ -54,10 +54,9 @@ with st.sidebar:
                 st.session_state.db.delete_thread(thread['thread_id'])
                 if st.session_state.current_thread == thread['thread_id']:
                     st.session_state.current_thread = None
-                st.rerun()
-    
-    st.divider()
-    
+                st.rerun()  
+    st.divider() 
+     
     # Settings
     st.subheader("⚙️ Settings")
     st.session_state.show_sources = st.checkbox("Show Sources", value=True)
@@ -65,8 +64,7 @@ with st.sidebar:
     show_stats = st.checkbox("Show Statistics", value=True)
     
     #Token tracking toggle
-    track_tokens = st.checkbox("Track Token Usage", value=False)
-    
+    track_tokens = st.checkbox("Track Token Usage", value=False)  
     st.divider()
     
     # Current thread info
@@ -79,8 +77,7 @@ with st.sidebar:
             stats = st.session_state.db.get_thread_stats(st.session_state.current_thread)
             st.metric("Total Tokens", f"{stats['total_input_tokens'] + stats['total_output_tokens']:,}")
             st.metric("Est. Cost", f"${stats['total_cost']:.4f}")  # Uncomment for cost tracking
-# Main area
-# if no thread exists, show thread create info
+#  Main area if no thread exists, show thread create info
 if not st.session_state.current_thread:
     st.title(config.PAGE_TITLE)
     st.info("👈 Create or select a thread to start chatting")
@@ -99,18 +96,15 @@ if not st.session_state.current_thread:
     
 if  st.session_state.current_thread:
     # Document upload
-    st.subheader("📤 Upload Documents")
-    
-    tab1, tab2 = st.tabs(["📁 File Upload", " URL"])
-    
+    st.subheader("📤 Upload Documents")   
+    tab1, tab2 = st.tabs(["📁 File Upload", " URL"])  
     with tab1:
         uploaded_files = st.file_uploader(
             "Upload documents",
             type=["pdf", "txt", "docx", "pptx", "py","csv"],
             accept_multiple_files=True,
             key="file_uploader"
-        )
-               
+        )             
         if uploaded_files:
             if st.button("Process Files", type="primary"):
                 with st.spinner("Processing documents...",show_time=True):
@@ -118,8 +112,7 @@ if  st.session_state.current_thread:
                         # Save temp file
                         temp_path = f"temp_{file.name}"
                         with open(temp_path, "wb") as f:
-                            f.write(file.getbuffer())
-                        
+                            f.write(file.getbuffer())                        
                         # Load and process
                         file_type = utils.get_file_extension(file.name)
                         docs = st.session_state.rag_engine1.load_documents(temp_path, file_type)
@@ -134,14 +127,12 @@ if  st.session_state.current_thread:
                         st.session_state.db.add_document(
                             st.session_state.current_thread,
                             file.name, file_type, chunk_count
-                        )
-                        
+                        )                       
                         # Cleanup
                         os.remove(temp_path)
                         
                         st.success(f" {file.name}: {chunk_count} chunks")
-                        
-    
+                           
     with tab2:
         url = st.text_input("Enter URL")
         if url and st.button("Load URL", type="primary"):
@@ -162,10 +153,8 @@ if  st.session_state.current_thread:
                     st.error(f" Error: {str(e)}")
     
     st.divider()
-    
     # Chat interface
-    st.subheader("💬 Chat")
-    
+    st.subheader("Chatbot")   
     # Display chat history
     messages = st.session_state.db.get_thread_messages(st.session_state.current_thread)
     
@@ -181,23 +170,19 @@ if  st.session_state.current_thread:
                         st.caption(utils.format_source_metadata(j.get("metadata", {})))
     
     # Query input
-    query = st.chat_input("Ask a question about your documents",max_chars=150)
-    
+    query = st.chat_input("Ask a question about your documents",max_chars=150)   
     if query:
         # Display user message
         with st.chat_message("user",avatar='human'):
-            st.markdown(query)
-        
+            st.markdown(query)       
         # Save user message
         st.session_state.db.add_message(
             st.session_state.current_thread, "user", query
-        )
-        
+        )      
         # Generate response with streaming
         with st.chat_message("assistant",avatar=None):
             response_placeholder = st.empty()
-            sources_placeholder = st.empty()
-            
+            sources_placeholder = st.empty()            
             full_response = ""
             sources = []
             tokens = {"input": 0, "output": 0}
@@ -217,9 +202,8 @@ if  st.session_state.current_thread:
                     tokens["input"] = event["input_tokens"]
                     tokens["output"] = event["output_tokens"]
             
-            response_placeholder.markdown(full_response)
+            response_placeholder.markdown(full_response)            
             
-            # Display sources
             if st.session_state.show_sources and sources:
                 with sources_placeholder.expander("📚 Sources", expanded=False):
                     for i, src in enumerate(sources, 1):
@@ -234,15 +218,13 @@ if  st.session_state.current_thread:
             full_response,
             sources,
             tokens["output"]
-        )
-        
+        )        
         # Log tokens
         cost = utils.calculate_cost(tokens["input"], tokens["output"])
         st.session_state.db.log_token_usage(
             st.session_state.current_thread,
             tokens["input"], tokens["output"], cost
-        )
-        
+        )       
         # Query suggestions
         if st.session_state.show_suggestions:
             suggestions = utils.generate_query_suggestions(query, [m["content"] for m in messages])
@@ -251,19 +233,17 @@ if  st.session_state.current_thread:
                 cols = st.columns(len(suggestions))
                 for col, suggestion in zip(cols, suggestions):
                     if col.button(suggestion, key=f"sug_{hash(suggestion)}"):
-                        st.rerun()
-    
+                        st.rerun()   
     #Thread actions
     st.divider()
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        new_name = st.text_input("Rename thread", key="rename_input")
+        new_name = st.text_input("Chat Rename", key="rename_input")
         if new_name and st.button("✏️ Rename"):
             st.session_state.db.rename_thread(st.session_state.current_thread, new_name)
             st.success(" Renamed!")
-            st.rerun()
-    
+            st.rerun()    
     with col2:
         if st.button(" View Checkpoints"):
             checkpoints = st.session_state.rag_engine1.get_checkpoint_history(
@@ -273,8 +253,7 @@ if  st.session_state.current_thread:
                 for cp in checkpoints[:10]:  # Show last 5
                     st.caption(f"Checkpoint {cp['step']}: {cp['checkpoint_id'][:8]}...")
             else:
-                st.info("No checkpoints yet")
-    
+                st.info("No checkpoints yet")   
     with col3:
         if st.button(" Export Chat"):
             chat_export = "\n\n".join([
@@ -286,5 +265,4 @@ if  st.session_state.current_thread:
                 chat_export,
                 file_name=f"chat_{st.session_state.current_thread[:8]}.txt",
                 mime="text/plain"
-            )
-            
+            )       
